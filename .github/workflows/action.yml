@@ -31,7 +31,12 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
+          # Only commit if there are actual changes
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit"
+          else
+            git commit -m "updated logs"
+          fi
           
       - name: push changes
         uses: ad-m/github-push-action@v0.6.0
