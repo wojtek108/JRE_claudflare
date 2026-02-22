@@ -59,10 +59,17 @@ Deployment Process:
 
 ### Cloudflare Pages (Primary)
 - **URL**: [jrescrape.pages.dev](https://jrescrape.pages.dev)
-- **Build Command**: (Not required - static files)
-- **Build Output Directory**: `/` (root)
-- **Environment Variables**: None required
-- **Benefits**: Global CDN, DDoS protection, free SSL, fast edge network
+- **Deployment Method**: Direct from GitHub repository (Git integration)
+- **Build Process**: None - static files deployed as-is
+- **Configuration Files**: None required - Cloudflare Pages automatically serves static files
+- **Setup**: Connected via Cloudflare Dashboard → Pages → Connect to Git
+- **Benefits**: 
+  - Global CDN with 300+ locations
+  - Automatic SSL/TLS certificates
+  - DDoS protection
+  - Instant cache invalidation on updates
+  - Free custom domain
+  - Analytics available
 
 ### GitHub Pages (Secondary/Backup)
 - **URL**: `https://wojtek108.github.io/JRE_claudflare/`
@@ -149,8 +156,7 @@ JRE_claudflare/
 ├── .github/workflows/       # GitHub Actions workflows
 │   ├── action.yml          # Scheduled scraper
 │   └── github-pages.yml    # GitHub Pages deployment
-├── wrangler.jsonc          # Cloudflare Workers configuration
-└── netlify.toml            # Legacy Netlify config (not used)
+└── venv/                    # Python virtual environment (local only)
 ```
 
 ## 🔧 Technical Details
