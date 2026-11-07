@@ -3,13 +3,17 @@ from datetime import date
 import requests
 
 url = "https://www.jrepodcast.com/"
+headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'}
 
-res = requests.get(url).text
+res = requests.get(url, headers=headers, timeout=30).text
 
 soup = BeautifulSoup(res, 'lxml')
 dates = soup.find_all('time', attrs= {'class' : 'entry-date published'})
 titles = soup.find_all('h3', attrs= {'class' : 'card__title'})
 intro = soup.find_all('div', attrs= {'class' : 'card__excerpt'})
+
+if not (titles and intro and dates):
+    raise SystemExit("Scrape failed: no episodes found - site structure changed or bot-blocked. Not writing output.")
 
 
 with open('scrape.html', 'w') as file:
@@ -47,10 +51,10 @@ with open('scrape.html', 'w') as file:
     file.write("<body>\n")
     file.write("    <h1>Recent Joe Rogan Experience Episodes:</h1>\n")
     file.write("    <hr>\n")
-    for item in range(len(intro)):
-        file.write(str(titles[item]) + '\n')
-        file.write(str(intro[item]) + '\n')
-        file.write(str(dates[item]) + '\n')
+    for title, excerpt, date_el in zip(titles, intro, dates):
+        file.write(str(title) + '\n')
+        file.write(str(excerpt) + '\n')
+        file.write(str(date_el) + '\n')
         file.write('<br>')
         file.write('<br>')
 
